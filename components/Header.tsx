@@ -18,7 +18,7 @@ export default function Header() {
 
   return (
     // Simple header container with padding and background
-    <header className="flex items-center justify-between p-1 bg-pink-100 dark:bg-pink-800">
+    <header className="flex items-center justify-between p-1 bg-pink-800 dark:bg-pink-800">
       {/* Logo image */}
       <div className="flex items-center gap-1">
         <Image
