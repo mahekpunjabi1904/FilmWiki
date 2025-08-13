@@ -15,7 +15,7 @@ export default async function Home() {
         {movies.map((movie: any) => (
           <div
             key={movie.id}
-            className="bg-gray-100 dark:bg-gray-800 p-4 rounded shadow"
+            className="bg-gray-100 dark:bg-gray-800 p-4 rounded shadow hover:shadow-lg hover:scale-105 transition-transform duration-200"
           >
             <Image
               src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -31,8 +31,18 @@ export default async function Home() {
 
             {/* Rating & release date */}
             <div className=" text-sm text-white mt-1">
-              <p><span className="text-pink-300 dark:text-pink-300 ">Ratings:</span> ⭐ {movie.vote_average.toFixed(1)}</p>
-              <p><span className="text-pink-300 dark:text-pink-300">Movie Release Date:</span> {movie.release_date}</p>
+              <p>
+                <span className="text-pink-300 dark:text-pink-300 ">
+                  Ratings:
+                </span>{" "}
+                ⭐ {movie.vote_average.toFixed(1)}
+              </p>
+              <p>
+                <span className="text-pink-300 dark:text-pink-300">
+                  Movie Release Date:
+                </span>{" "}
+                {movie.release_date}
+              </p>
             </div>
           </div>
         ))}
