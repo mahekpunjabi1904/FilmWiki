@@ -1,4 +1,5 @@
 import { fetchFromTMDB } from "@/lib/tmdb";
+import Image from "next/image";
 
 export default async function Home() {
   // Fetch popular movies from TMDB
@@ -16,8 +17,14 @@ export default async function Home() {
             key={movie.id}
             className="bg-gray-100 dark:bg-gray-800 p-4 rounded shadow"
           >
-            {/* Placeholder for poster */}
-            <div className="bg-gray-300 dark:bg-gray-700 h-48 mb-2 rounded"></div>
+              <Image
+              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+              alt={movie.title}
+              width={500}
+              height={750}
+              className="w-full h-auto rounded mb-2"
+              priority
+            />
 
             {/* Movie title from API */}
             <h2 className="text-lg font-semibold">{movie.title}</h2>
