@@ -1,4 +1,6 @@
 "use client";
+import Link from "next/link";
+
 import { Sun, Moon } from "lucide-react";
 
 import Image from "next/image";
@@ -18,9 +20,10 @@ export default function Header() {
 
   return (
     // Simple header container with padding and background
-    <header className="flex items-center justify-between p-1 bg-pink-800 dark:bg-pink-800">
+    <header className="sticky top-0 z-50 flex items-center justify-between p-1 bg-pink-800 dark:bg-pink-800">
       {/* Logo image */}
       <div className="flex items-center gap-1">
+        <Link href="/" className="flex items-center gap-3">
         <Image
           src="/filmwiki-logo.png"
           alt="FilmWiki Logo"
@@ -28,7 +31,8 @@ export default function Header() {
           height={20}
           priority
         />
-        <h1 className="text-xl font-bold">FilmWiki</h1>
+        <h1 className="text-xl font-bold text-white dark:text-white">FilmWiki</h1>
+        </Link>
       </div>
 
       <button
