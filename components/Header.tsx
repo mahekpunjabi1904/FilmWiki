@@ -57,30 +57,34 @@ export default function Header() {
 
       {/* Desktop Nav */}
       <nav className="hidden md:flex items-center gap-6">
-        <Link href="/" className={linkClasses("/")}>Home</Link>
-        <Link href="/favorites" className={linkClasses("/favorites")}>Favorites</Link>
+        <Link href="/" className={linkClasses("/")}>
+          Home
+        </Link>
+        <Link href="/favorites" className={linkClasses("/favorites")}>
+          Favorites
+        </Link>
       </nav>
 
       {/* Right: Controls */}
       <div className="flex items-center gap-2">
-        
-
-       
-
         {/* Dark Mode */}
         <button
           onClick={() => setDarkMode(!darkMode)}
           className="p-2 rounded-full bg-gray-300 dark:bg-gray-600 hover:bg-black dark:hover:bg-white"
         >
-          {darkMode ? <Sun className="w-5 h-5 text-yellow-400" /> : <Moon className="w-5 h-5 text-gray-800" />}
+          {darkMode ? (
+            <Sun className="w-5 h-5 text-yellow-400" />
+          ) : (
+            <Moon className="w-5 h-5 text-gray-800" />
+          )}
         </button>
 
         {/* User Icon */}
         <button
           onClick={() => router.push("/login")}
-          className="p-2 rounded-full bg-gray-300 dark:bg-gray-600 hover:bg-black dark:hover:bg-white"
+          className="p-2 rounded-full bg-gray-300 dark:bg-gray-600 hover:bg-pink-500 hover:shadow-lg hover:shadow-pink-300/50 transition-all duration-200 group"
         >
-          <User className="w-5 h-5 text-gray-800 dark:text-white" />
+          <User className="w-5 h-5 text-gray-800 dark:text-white group-hover:text-white" />
         </button>
 
         {/* Hamburger Menu (Mobile) */}
@@ -96,11 +100,24 @@ export default function Header() {
       {menuOpen && (
         <div className="absolute top-full left-0 w-full bg-pink-900 dark:bg-pink-900 shadow-lg md:hidden">
           <nav className="flex flex-col divide-y divide-pink-700">
-            <Link href="/" className={`${linkClasses("/")} block px-6 py-3 text-white hover:bg-pink-700`} onClick={() => setMenuOpen(false)}>Home</Link>
-            <Link href="/favorites" className={`${linkClasses("/favorites")} block px-6 py-3 text-white hover:bg-pink-700`} onClick={() => setMenuOpen(false)}>Favorites</Link>
-
-           
-
+            <Link
+              href="/"
+              className={`${linkClasses(
+                "/"
+              )} block px-6 py-3 text-white hover:bg-pink-700`}
+              onClick={() => setMenuOpen(false)}
+            >
+              Home
+            </Link>
+            <Link
+              href="/favorites"
+              className={`${linkClasses(
+                "/favorites"
+              )} block px-6 py-3 text-white hover:bg-pink-700`}
+              onClick={() => setMenuOpen(false)}
+            >
+              Favorites
+            </Link>
           </nav>
         </div>
       )}
