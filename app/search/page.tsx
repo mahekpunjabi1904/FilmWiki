@@ -6,17 +6,23 @@ import Image from "next/image";
 import Link from "next/link";
 import { searchMovies } from "@/lib/tmdb";
 
+interface Movie {
+  id: number;
+  title: string;
+  poster_path: string | null;
+}
+
 export default function SearchPage() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
-  const [movies, setMovies] = useState<any[]>([]);
+  const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (query.trim()) {
       setLoading(true);
       searchMovies(query)
-        .then((data) => {
+        .then((data: { results: Movie[] }) => {
           setMovies(data.results || []);
           setLoading(false);
         })

@@ -1,8 +1,23 @@
 import Image from "next/image";
 import FavoriteButton from "@/components/FavoriteButton";
 
+interface Genre {
+  id: number;
+  name: string;
+}
 
-export default function MovieDetailsCard({ movie }: { movie: any }) {
+interface Movie {
+  id: number;
+  title: string;
+  poster_path: string | null;
+  overview: string;
+  release_date: string;
+  vote_average: number;
+  runtime: number;
+  genres: Genre[];
+}
+
+export default function MovieDetailsCard({ movie }: { movie: Movie }) {
   return (
     <div className="bg-gray-100 dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden max-w-5xl mx-auto">
       <div className="flex flex-col md:flex-row">
@@ -20,10 +35,14 @@ export default function MovieDetailsCard({ movie }: { movie: any }) {
 
         {/* Movie info */}
         <div className="md:w-2/3 p-6 flex flex-col justify-center">
-          <h1 className="text-4xl font-bold mb-4 text-pink-300 dark:text-pink-300">{movie.title}</h1>
+          <h1 className="text-4xl font-bold mb-4 text-pink-300 dark:text-pink-300">
+            {movie.title}
+          </h1>
           <FavoriteButton movie={movie} />
 
-          <p className="text-gray-700 dark:text-gray-300 mb-6">{movie.overview}</p>
+          <p className="text-gray-700 dark:text-gray-300 mb-6">
+            {movie.overview}
+          </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-800 dark:text-gray-200">
             <p>
@@ -40,7 +59,7 @@ export default function MovieDetailsCard({ movie }: { movie: any }) {
             </p>
             <p>
               <span className="font-semibold text-pink-500">Genres:</span>{" "}
-              {movie.genres.map((g: any) => g.name).join(", ")}
+              {movie.genres.map((g) => g.name).join(", ")}
             </p>
           </div>
         </div>

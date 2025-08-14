@@ -5,12 +5,19 @@ import { Heart } from "lucide-react";
 import { isFavorite, toggleFavorite } from "@/lib/favorites";
 import { useSession } from "next-auth/react";
 
+interface Movie {
+  id: number;
+  title: string;
+  poster_path?: string | null;
+  // add any other fields you actually use from the movie object
+}
+
 type Props = {
-  movie: any;
+  movie: Movie;
   onToggle?: () => void; // optional callback
 };
 
-export default function FavoriteButton({ movie,  onToggle }: Props) {
+export default function FavoriteButton({ movie, onToggle }: Props) {
   const { data: session } = useSession();
 
   const [favorite, setFavorite] = useState(false);
@@ -23,7 +30,7 @@ export default function FavoriteButton({ movie,  onToggle }: Props) {
     })();
   }, [session, movie.id]);
 
-  const handleClick = async (e: React.MouseEvent) => {
+  const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     e.preventDefault();
     if (!session) {
@@ -32,8 +39,6 @@ export default function FavoriteButton({ movie,  onToggle }: Props) {
     }
     await toggleFavorite(movie);
     setFavorite((prev) => !prev);
-
-    // Trigger parent refresh
 
     if (onToggle) onToggle();
   };

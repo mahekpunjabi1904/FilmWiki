@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useSession } from "next-auth/react";
@@ -7,13 +6,20 @@ import { useEffect, useState } from "react";
 import { getFavorites } from "@/lib/favorites";
 import Link from "next/link";
 import Image from "next/image";
-import FavoriteButton from "@/components/FavoriteButton";
 import SkeletonCard from "@/components/SkeletonCard";
+
+interface Movie {
+  id: number;
+  title: string;
+  poster_path: string;
+  vote_average?: number;
+  release_date?: string;
+}
 
 export default function FavoritesPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
-    const [favorites, setFavorites] = useState<any[]>([]);
+  const [favorites, setFavorites] = useState<Movie[]>([]);
   const [loadingFavs, setLoadingFavs] = useState(true);
 
   useEffect(() => {
@@ -44,8 +50,9 @@ export default function FavoritesPage() {
     );
   }
 
-    function removeFavorite(id: any): void {
-    throw new Error("Function not implemented.");
+  function removeFavorite(id: number): void {
+    // Implement remove logic here
+    console.log(`Remove favorite with id ${id}`);
   }
 
   return (
@@ -63,7 +70,6 @@ export default function FavoritesPage() {
               key={movie.id}
               className="bg-gray-100 dark:bg-gray-800 p-4 rounded shadow"
             >
-              {/* Wrap image and title in Link so card is clickable */}
               <Link href={`/movie/${movie.id}`}>
                 <div className="cursor-pointer hover:scale-105 transition-transform duration-200">
                   <Image
@@ -76,8 +82,6 @@ export default function FavoritesPage() {
                   <h2 className="text-lg text-white font-semibold">
                     {movie.title}
                   </h2>
-
-                  {/* Rating & release date like home page */}
                   <div className="text-sm text-white mt-1">
                     <p>
                       <span className="text-pink-300">Ratings:</span> ⭐{" "}
@@ -90,8 +94,6 @@ export default function FavoritesPage() {
                   </div>
                 </div>
               </Link>
-
-              {/* Remove Favorite button */}
               <button
                 onClick={() => removeFavorite(movie.id)}
                 className="mt-2 bg-pink-600 hover:bg-pink-700 text-white px-3 py-1 rounded"
