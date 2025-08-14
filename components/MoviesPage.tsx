@@ -54,6 +54,11 @@ export default function MoviesPage({
     fetchData();
   }, [searchQuery, page]);
 
+  // Scroll to top on page change
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [page]);
+
   return (
     <main className="p-4 overflow-x-hidden">
       <SearchBar
@@ -64,9 +69,7 @@ export default function MoviesPage({
       />
 
       <h1 className="text-3xl font-bold mb-6 text-white">
-        {searchQuery
-          ? `Search Results for "${searchQuery}"`
-          : "Popular Movies"}
+        {searchQuery ? `Search Results for "${searchQuery}"` : "Popular Movies"}
       </h1>
 
       {loading ? (
