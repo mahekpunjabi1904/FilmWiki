@@ -37,13 +37,25 @@ export default function Header() {
       <nav className="flex items-center gap-6">
         <Link
           href="/"
-          className="text-white hover:text-pink-300 transition-colors cursor-pointer"
+          className="text-gray-800 dark:text-white hover:text-yellow-300 transition-colors cursor-pointer"
         >
           Home
         </Link>
         <Link
+          href="/popular"
+          className="text-gray-800 dark:text-white hover:text-yellow-300 transition-colors cursor-pointer"
+        >
+          Popular
+        </Link>
+        <Link
+          href="/new-releases"
+          className="text-gray-800 dark:text-white hover:text-yellow-300 transition-colors cursor-pointer"
+        >
+          New Releases
+        </Link>
+        <Link
           href="/favorites"
-          className="text-white hover:text-pink-300 transition-colors cursor-pointer"
+          className="text-gray-800 dark:text-white hover:text-yellow-300 transition-colors cursor-pointer"
         >
           Favorites
         </Link>
