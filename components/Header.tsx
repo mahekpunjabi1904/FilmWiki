@@ -8,6 +8,7 @@ import { useSession, signOut } from "next-auth/react";
 export default function Header() {
   const [darkMode, setDarkMode] = useState(false);
   const { data: session, status } = useSession();
+  
 
   useEffect(() => {
     if (darkMode) {
@@ -40,18 +41,6 @@ export default function Header() {
           className="text-gray-800 dark:text-white hover:text-yellow-300 transition-colors cursor-pointer"
         >
           Home
-        </Link>
-        <Link
-          href="/popular"
-          className="text-gray-800 dark:text-white hover:text-yellow-300 transition-colors cursor-pointer"
-        >
-          Popular
-        </Link>
-        <Link
-          href="/new-releases"
-          className="text-gray-800 dark:text-white hover:text-yellow-300 transition-colors cursor-pointer"
-        >
-          New Releases
         </Link>
         <Link
           href="/favorites"
