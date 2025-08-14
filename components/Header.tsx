@@ -1,15 +1,19 @@
 "use client";
 import Link from "next/link";
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, Menu, X, User, Search } from "lucide-react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useSession, signOut } from "next-auth/react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function Header() {
   const [darkMode, setDarkMode] = useState(false);
-  const { data: session, status } = useSession();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const { data: session } = useSession();
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     if (darkMode) {
@@ -21,66 +25,85 @@ export default function Header() {
 
   const linkClasses = (path: string) =>
     `hover:text-yellow-300 transition-colors cursor-pointer font-medium ${
-      pathname === path ? "text-yellow-400 font-bold" : "text-gray-800 dark:text-white"
+      pathname === path
+        ? "text-yellow-400 font-bold"
+        : "text-gray-800 dark:text-white"
     }`;
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?query=${encodeURIComponent(searchQuery)}`);
+      setSearchOpen(false);
+      setMenuOpen(false);
+    }
+  };
+
   return (
-    <header className="sticky top-0 z-50 flex items-center justify-between p-1 bg-pink-800 dark:bg-pink-800">
+    <header className="sticky top-0 z-50 flex items-center justify-between p-2 bg-pink-800 dark:bg-pink-800">
       {/* Left: Logo */}
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-2">
         <Link href="/" className="flex items-center gap-3">
           <Image
             src="/filmwiki-logo.png"
             alt="FilmWiki Logo"
-            width={70}
+            width={50}
             height={20}
             priority
           />
-          <h1 className="text-xl font-bold text-white">FilmWiki</h1>
+          <h1 className="text-lg font-bold text-white">FilmWiki</h1>
         </Link>
       </div>
 
-      {/* Middle: Navigation Links */}
-      <nav className="flex items-center gap-6">
-        <Link href="/" className={linkClasses("/")}>
-          Home
-        </Link>
-        <Link href="/favorites" className={linkClasses("/favorites")}>
-          Favorites
-        </Link>
+      {/* Desktop Nav */}
+      <nav className="hidden md:flex items-center gap-6">
+        <Link href="/" className={linkClasses("/")}>Home</Link>
+        <Link href="/favorites" className={linkClasses("/favorites")}>Favorites</Link>
       </nav>
 
-      {/* Right: Dark Mode + Login/Logout */}
+      {/* Right: Controls */}
       <div className="flex items-center gap-2">
+        
+
+       
+
+        {/* Dark Mode */}
         <button
           onClick={() => setDarkMode(!darkMode)}
-          className="p-2 rounded-full mr-2 transition-colors 
-             bg-gray-300 dark:bg-gray-600 
-             hover:bg-black dark:hover:bg-white"
+          className="p-2 rounded-full bg-gray-300 dark:bg-gray-600 hover:bg-black dark:hover:bg-white"
         >
-          {darkMode ? (
-            <Sun className="w-5 h-5 text-yellow-400" />
-          ) : (
-            <Moon className="w-5 h-5 text-gray-800" />
-          )}
+          {darkMode ? <Sun className="w-5 h-5 text-yellow-400" /> : <Moon className="w-5 h-5 text-gray-800" />}
         </button>
 
-        {session ? (
-          <button
-            onClick={() => signOut()}
-            className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
-          >
-            Logout
-          </button>
-        ) : (
-          <Link
-            href="/login"
-            className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
-          >
-            Login
-          </Link>
-        )}
+        {/* User Icon */}
+        <button
+          onClick={() => router.push("/login")}
+          className="p-2 rounded-full bg-gray-300 dark:bg-gray-600 hover:bg-black dark:hover:bg-white"
+        >
+          <User className="w-5 h-5 text-gray-800 dark:text-white" />
+        </button>
+
+        {/* Hamburger Menu (Mobile) */}
+        <button
+          className="md:hidden p-2 rounded bg-gray-300 dark:bg-gray-600"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      {menuOpen && (
+        <div className="absolute top-full left-0 w-full bg-pink-900 dark:bg-pink-900 shadow-lg md:hidden">
+          <nav className="flex flex-col divide-y divide-pink-700">
+            <Link href="/" className={`${linkClasses("/")} block px-6 py-3 text-white hover:bg-pink-700`} onClick={() => setMenuOpen(false)}>Home</Link>
+            <Link href="/favorites" className={`${linkClasses("/favorites")} block px-6 py-3 text-white hover:bg-pink-700`} onClick={() => setMenuOpen(false)}>Favorites</Link>
+
+           
+
+          </nav>
+        </div>
+      )}
     </header>
   );
 }
