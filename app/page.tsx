@@ -40,3 +40,4 @@ export default function Home() {
     <MoviesPage initialMovies={initialMovies} totalPages={totalPages} />
   );
 }
+  
