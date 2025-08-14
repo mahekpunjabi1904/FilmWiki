@@ -1,10 +1,7 @@
 "use client";
 import Link from "next/link";
-
 import { Sun, Moon } from "lucide-react";
-
 import Image from "next/image";
-
 import { useState, useEffect } from "react";
 
 export default function Header() {
@@ -19,22 +16,30 @@ export default function Header() {
   }, [darkMode]);
 
   return (
-    // Simple header container with padding and background
     <header className="sticky top-0 z-50 flex items-center justify-between p-1 bg-pink-800 dark:bg-pink-800">
-      {/* Logo image */}
-      <div className="flex items-center gap-1">
+      {/* Logo */}
+      <div className="flex items-center gap-4">
         <Link href="/" className="flex items-center gap-3">
-        <Image
-          src="/filmwiki-logo.png"
-          alt="FilmWiki Logo"
-          width={70}
-          height={20}
-          priority
-        />
-        <h1 className="text-xl font-bold text-white dark:text-white">FilmWiki</h1>
+          <Image
+            src="/filmwiki-logo.png"
+            alt="FilmWiki Logo"
+            width={70}
+            height={20}
+            priority
+          />
+          <h1 className="text-xl font-bold text-white dark:text-white">FilmWiki</h1>
+        </Link>
+
+        {/* Favorites Link */}
+        <Link
+          href="/favorites"
+          className="text-white hover:text-yellow-300 font-medium transition-colors"
+        >
+          Favorites
         </Link>
       </div>
 
+      {/* Theme Toggle */}
       <button
         onClick={() => setDarkMode(!darkMode)}
         className="p-2 rounded-full mr-2 transition-colors 
@@ -42,9 +47,9 @@ export default function Header() {
              hover:bg-black dark:hover:bg-white"
       >
         {darkMode ? (
-          <Sun className="w-5 h-5 text-yellow-400" /> // sun icon for dark mode
+          <Sun className="w-5 h-5 text-yellow-400" />
         ) : (
-          <Moon className="w-5 h-5 text-gray-800" /> // moon icon for light mode
+          <Moon className="w-5 h-5 text-gray-800" />
         )}
       </button>
     </header>
