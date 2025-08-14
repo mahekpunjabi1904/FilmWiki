@@ -11,7 +11,9 @@ export default function FavoriteButton({ movie }: { movie: any }) {
     setFavorite(isFavorite(movie.id));
   }, [movie.id]);
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent parent click event
+    e.preventDefault();  //Prevent Link navigation
     toggleFavorite(movie);
     setFavorite((prev) => !prev);
   };
@@ -19,10 +21,10 @@ export default function FavoriteButton({ movie }: { movie: any }) {
   return (
     <button
       onClick={handleClick}
-      className={`flex items-center gap-2 px-3 py-1 rounded-full transition ${
+      className={`flex items-center gap-2 px-3 py-1 rounded-full cursor-pointer transition ${
         favorite
-          ? "bg-pink-600 text-white"
-          : "bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+      ? "bg-pink-600 text-white hover:bg-pink-700"
+      : "bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-pink-500 hover:text-white"
       }`}
     >
       <Heart
