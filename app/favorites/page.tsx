@@ -6,33 +6,33 @@ import { useEffect, useState } from "react";
 import { getFavorites } from "@/lib/favorites";
 import Link from "next/link";
 import Image from "next/image";
+import FavoriteButton from "@/components/FavoriteButton";
 
 export default function FavoritesPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [favorites, setFavorites] = useState<any[]>([]);
-    const [loadingFavs, setLoadingFavs] = useState(true);
+  const [loadingFavs, setLoadingFavs] = useState(true);
 
-
-  // Redirect to login if not authenticated
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/login");
     }
   }, [status, router]);
 
-  // Load favorites when authenticated
+  const loadFavorites = async () => {
+    const favs = await getFavorites();
+    setFavorites(favs);
+    setLoadingFavs(false);
+  };
+
   useEffect(() => {
     if (status === "authenticated") {
-      (async () => {
-        const favs = await getFavorites();
-        setFavorites(favs);
-        setLoadingFavs(false);
-      })();
+      loadFavorites();
     }
   }, [status]);
 
-  if (status === "loading") {
+  if (status === "loading" || loadingFavs) {
     return <p>Loading...</p>;
   }
 
@@ -47,8 +47,11 @@ export default function FavoritesPage() {
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {favorites.map((movie) => (
-            <Link href={`/movie/${movie.id}`} key={movie.id}>
-              <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded shadow hover:shadow-lg hover:scale-105 transition-transform duration-200 cursor-pointer">
+            <div
+              key={movie.id}
+              className="bg-gray-100 dark:bg-gray-800 p-4 rounded shadow hover:shadow-lg hover:scale-105 transition-transform duration-200"
+            >
+              <Link href={`/movie/${movie.id}`}>
                 <Image
                   src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                   alt={movie.title}
@@ -56,11 +59,13 @@ export default function FavoritesPage() {
                   height={750}
                   className="w-full h-auto rounded mb-2"
                 />
-                <h2 className="text-lg text-white font-semibold">
-                  {movie.title}
-                </h2>
+                <h2 className="text-lg text-white font-semibold">{movie.title}</h2>
+              </Link>
+              {/* Pass callback to refresh list */}
+              <div className="mt-2">
+                <FavoriteButton movie={movie} onToggle={loadFavorites} />
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       )}
