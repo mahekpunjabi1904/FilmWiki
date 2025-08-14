@@ -16,27 +16,27 @@ export default function MoviesPage({ initialMovies, totalPages: initialTotal }) 
   const [totalPages, setTotalPages] = useState(initialTotal);
 
   useEffect(() => {
-    if (page === 1 && !searchQuery) return; // Already loaded via SSR
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        let data;
-        if (searchQuery) {
-          data = await searchMovies(searchQuery, page);
-        } else {
-          data = await fetchFromTMDB("/movie/popular", page);
-        }
-        setMovies(data?.results || []);
-        setTotalPages(data?.total_pages || 1);
-      } catch {
-        setError("Failed to load movies. Please try again later.");
-      } finally {
-        setLoading(false);
+  const fetchData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      let data;
+      if (searchQuery) {
+        data = await searchMovies(searchQuery, page);
+      } else {
+        data = await fetchFromTMDB("/movie/popular", page);
       }
-    };
-    fetchData();
-  }, [searchQuery, page]);
+      setMovies(data?.results || []);
+      setTotalPages(data?.total_pages || 1);
+    } catch {
+      setError("Failed to load movies. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
+  fetchData();
+}, [searchQuery, page]);
+
 
   return (
     <main className="p-4 overflow-x-hidden">

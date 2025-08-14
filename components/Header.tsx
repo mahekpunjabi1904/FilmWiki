@@ -54,6 +54,7 @@ export default function Header() {
           <h1 className="text-lg font-bold text-white">FilmWiki</h1>
         </Link>
       </div>
+      
 
       {/* Desktop Nav */}
       <nav className="hidden md:flex items-center gap-6">
