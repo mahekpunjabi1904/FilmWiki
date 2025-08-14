@@ -19,8 +19,8 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 flex items-center justify-between p-1 bg-pink-800 dark:bg-pink-800">
-      {/* Logo */}
-      <div className="flex items-center gap-4">
+      {/* Left: Logo */}
+      <div className="flex items-center gap-1">
         <Link href="/" className="flex items-center gap-3">
           <Image
             src="/filmwiki-logo.png"
@@ -29,27 +29,44 @@ export default function Header() {
             height={20}
             priority
           />
-          <h1 className="text-xl font-bold text-white dark:text-white">
-            FilmWiki
-          </h1>
+          <h1 className="text-xl font-bold text-white">FilmWiki</h1>
         </Link>
-
-        {/* Show Favorites only if logged in */}
-        {status === "authenticated" && (
-          <Link
-            href="/favorites"
-            className="text-white hover:text-yellow-300 font-medium transition-colors"
-          >
-            Favorites
-          </Link>
-        )}
       </div>
 
-      {/* Right Section: Auth Buttons + Theme Toggle */}
-      <div className="flex items-center gap-3">
-        {status === "authenticated" ? (
+      {/* Middle: Navigation Links */}
+      <nav className="flex items-center gap-6">
+        <Link
+          href="/"
+          className="text-white hover:text-pink-300 transition-colors cursor-pointer"
+        >
+          Home
+        </Link>
+        <Link
+          href="/favorites"
+          className="text-white hover:text-pink-300 transition-colors cursor-pointer"
+        >
+          Favorites
+        </Link>
+      </nav>
+
+      {/* Right: Dark Mode + Login/Logout */}
+      <div className="flex items-center gap-2">
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="p-2 rounded-full mr-2 transition-colors 
+             bg-gray-300 dark:bg-gray-600 
+             hover:bg-black dark:hover:bg-white"
+        >
+          {darkMode ? (
+            <Sun className="w-5 h-5 text-yellow-400" />
+          ) : (
+            <Moon className="w-5 h-5 text-gray-800" />
+          )}
+        </button>
+
+        {session ? (
           <button
-            onClick={() => signOut({ callbackUrl: "/" })}
+            onClick={() => signOut()}
             className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
           >
             Logout
@@ -62,19 +79,6 @@ export default function Header() {
             Login
           </Link>
         )}
-
-        <button
-          onClick={() => setDarkMode(!darkMode)}
-          className="p-2 rounded-full transition-colors 
-               bg-gray-300 dark:bg-gray-600 
-               hover:bg-black dark:hover:bg-white"
-        >
-          {darkMode ? (
-            <Sun className="w-5 h-5 text-yellow-400" />
-          ) : (
-            <Moon className="w-5 h-5 text-gray-800" />
-          )}
-        </button>
       </div>
     </header>
   );
