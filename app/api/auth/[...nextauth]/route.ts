@@ -17,7 +17,7 @@ const handler = NextAuth({
             u.password === credentials?.password
         );
         return user
-          ? { id: String(user.id), name: user.name, email: user.email } // ✅ convert id to string
+          ? { id: String(user.id), name: user.name, email: user.email } 
           : null;
       }
     })

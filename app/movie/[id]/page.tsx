@@ -11,13 +11,14 @@ interface Movie {
   id: number;
   title: string;
   poster_path: string | null;
-  release_date?: string;
-  vote_average?: number;
-  overview?: string;
-  genres?: { id: number; name: string }[];
-  runtime?: number;
-  backdrop_path?: string | null;
+  release_date: string;
+  vote_average: number;
+  overview: string;
+  genres: { id: number; name: string }[];
+  runtime: number;
+  backdrop_path: string | null;
 }
+
 
 export default function MoviePage() {
   const params = useParams();
@@ -39,9 +40,12 @@ export default function MoviePage() {
     );
   }
 
-  return (
-    <main className="p-4">
-      {movie && <MovieDetailsCard movie={movie} />}
-    </main>
-  );
+return (
+  <main className="p-4">
+    {movie && (
+      <MovieDetailsCard movie={{ ...movie, overview: movie.overview ?? "" }} />
+    )}
+  </main>
+);
+
 }
