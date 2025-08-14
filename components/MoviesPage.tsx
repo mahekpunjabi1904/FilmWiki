@@ -6,44 +6,67 @@ import Image from "next/image";
 import Link from "next/link";
 import SearchBar from "@/components/SearchBar";
 import SkeletonCard from "@/components/SkeletonCard";
+import FavoriteButton from "@/components/FavoriteButton";
 
-export default function MoviesPage({ initialMovies, totalPages: initialTotal }) {
-  const [movies, setMovies] = useState(initialMovies);
+interface Movie {
+  id: number;
+  title: string;
+  poster_path: string | null;
+  vote_average: number;
+  release_date: string;
+}
+
+interface MoviesPageProps {
+  initialMovies: Movie[];
+  totalPages: number;
+}
+
+export default function MoviesPage({
+  initialMovies,
+  totalPages: initialTotal,
+}: MoviesPageProps) {
+  const [movies, setMovies] = useState<Movie[]>(initialMovies);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(initialTotal);
 
   useEffect(() => {
-  const fetchData = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      let data;
-      if (searchQuery) {
-        data = await searchMovies(searchQuery, page);
-      } else {
-        data = await fetchFromTMDB("/movie/popular", page);
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        let data;
+        if (searchQuery) {
+          data = await searchMovies(searchQuery, page);
+        } else {
+          data = await fetchFromTMDB("/movie/popular", page);
+        }
+        setMovies(data?.results || []);
+        setTotalPages(data?.total_pages || 1);
+      } catch {
+        setError("Failed to load movies. Please try again later.");
+      } finally {
+        setLoading(false);
       }
-      setMovies(data?.results || []);
-      setTotalPages(data?.total_pages || 1);
-    } catch {
-      setError("Failed to load movies. Please try again later.");
-    } finally {
-      setLoading(false);
-    }
-  };
-  fetchData();
-}, [searchQuery, page]);
-
+    };
+    fetchData();
+  }, [searchQuery, page]);
 
   return (
     <main className="p-4 overflow-x-hidden">
-      <SearchBar onSearch={(query) => { setSearchQuery(query); setPage(1); }} />
+      <SearchBar
+        onSearch={(query) => {
+          setSearchQuery(query);
+          setPage(1);
+        }}
+      />
 
       <h1 className="text-3xl font-bold mb-6 text-white">
-        {searchQuery ? `Search Results for "${searchQuery}"` : "Popular Movies"}
+        {searchQuery
+          ? `Search Results for "${searchQuery}"`
+          : "Popular Movies"}
       </h1>
 
       {loading ? (
@@ -66,17 +89,28 @@ export default function MoviesPage({ initialMovies, totalPages: initialTotal }) 
                       alt={movie.title}
                       width={500}
                       height={750}
-                      className="w-full h-[300px] object-cover rounded mb-2"
+                      className="w-full h-auto rounded mb-2"
                     />
                   ) : (
                     <div className="w-full h-[300px] bg-gray-600 rounded mb-2 flex items-center justify-center text-white">
                       No Image
                     </div>
                   )}
-                  <h2 className="text-lg text-white font-semibold">{movie.title}</h2>
+                  <h2 className="text-lg text-white font-semibold">
+                    {movie.title}
+                  </h2>
                   <div className="text-sm text-white mt-1">
-                    <p><span className="text-pink-300">Ratings:</span> ⭐ {movie.vote_average?.toFixed(1) || "N/A"}</p>
-                    <p><span className="text-pink-300">Release Date:</span> {movie.release_date || "N/A"}</p>
+                    <p>
+                      <span className="text-pink-300">Ratings:</span> ⭐{" "}
+                      {movie.vote_average?.toFixed(1) || "N/A"}
+                    </p>
+                    <p>
+                      <span className="text-pink-300">Release Date:</span>{" "}
+                      {movie.release_date || "N/A"}
+                    </p>
+                    <div>
+                      <FavoriteButton movie={movie} />
+                    </div>
                   </div>
                 </div>
               </Link>
@@ -92,7 +126,9 @@ export default function MoviesPage({ initialMovies, totalPages: initialTotal }) 
             >
               &lt; Prev
             </button>
-            <span className="text-white">Page {page} of {totalPages}</span>
+            <span className="text-white">
+              Page {page} of {totalPages}
+            </span>
             <button
               onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
               disabled={page === totalPages}

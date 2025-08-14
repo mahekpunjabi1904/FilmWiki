@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import Link from "next/link";
 import { Sun, Moon, Menu, X, User, Search } from "lucide-react";
