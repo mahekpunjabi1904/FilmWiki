@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search } from "lucide-react"; // Search icon
+import { Search, X } from "lucide-react"; // Search icon
+
 import debounce from "lodash.debounce"; // To limit API calls
 
 type SearchBarProps = {
@@ -24,6 +25,10 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
       debouncedSearch.cancel();
     };
   }, [query]);
+  const clearSearch = () => {
+    setQuery("");
+    onSearch(""); // Reset results to popular movies
+  };
 
   return (
     <div className="flex items-center bg-gray-200 dark:bg-gray-700 rounded-full px-4 py-2 mb-6 w-full sm:w-96 mx-auto shadow">
@@ -35,6 +40,17 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
         placeholder="Search for a movie..."
         className="bg-transparent outline-none flex-1 text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
       />
+
+      {query && (
+        <button
+          onClick={clearSearch}
+          className="p-1 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+        >
+          <X className="w-4 h-4 text-gray-500 dark:text-gray-300" />
+        </button>
+      )}
     </div>
+
+    
   );
 }
