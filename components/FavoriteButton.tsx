@@ -3,18 +3,30 @@
 import { useState, useEffect } from "react";
 import { Heart } from "lucide-react";
 import { isFavorite, toggleFavorite } from "@/lib/favorites";
+import { useSession } from "next-auth/react";
+
 
 export default function FavoriteButton({ movie }: { movie: any }) {
+    const { data: session } = useSession();
+
   const [favorite, setFavorite] = useState(false);
 
-  useEffect(() => {
-    setFavorite(isFavorite(movie.id));
-  }, [movie.id]);
+ useEffect(() => {
+    if (!session) return; // only check if logged in
+    (async () => {
+      const favStatus = await isFavorite(movie.id);
+      setFavorite(favStatus);
+    })();
+  }, [session, movie.id]);
 
-  const handleClick = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent parent click event
-    e.preventDefault();  //Prevent Link navigation
-    toggleFavorite(movie);
+  const handleClick = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    if (!session) {
+      alert("Please log in to save favorites");
+      return;
+    }
+    await toggleFavorite(movie);
     setFavorite((prev) => !prev);
   };
 

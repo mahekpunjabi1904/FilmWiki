@@ -1,16 +1,40 @@
 "use client";
 
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getFavorites } from "@/lib/favorites";
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function FavoritesPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [favorites, setFavorites] = useState<any[]>([]);
+    const [loadingFavs, setLoadingFavs] = useState(true);
 
+
+  // Redirect to login if not authenticated
   useEffect(() => {
-    setFavorites(getFavorites());
-  }, []);
+    if (status === "unauthenticated") {
+      router.push("/login");
+    }
+  }, [status, router]);
+
+  // Load favorites when authenticated
+  useEffect(() => {
+    if (status === "authenticated") {
+      (async () => {
+        const favs = await getFavorites();
+        setFavorites(favs);
+        setLoadingFavs(false);
+      })();
+    }
+  }, [status]);
+
+  if (status === "loading") {
+    return <p>Loading...</p>;
+  }
 
   return (
     <main className="p-4">
@@ -32,7 +56,9 @@ export default function FavoritesPage() {
                   height={750}
                   className="w-full h-auto rounded mb-2"
                 />
-                <h2 className="text-lg text-white font-semibold">{movie.title}</h2>
+                <h2 className="text-lg text-white font-semibold">
+                  {movie.title}
+                </h2>
               </div>
             </Link>
           ))}

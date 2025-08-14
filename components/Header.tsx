@@ -3,9 +3,11 @@ import Link from "next/link";
 import { Sun, Moon } from "lucide-react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import { useSession, signOut } from "next-auth/react";
 
 export default function Header() {
   const [darkMode, setDarkMode] = useState(false);
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     if (darkMode) {
@@ -27,31 +29,53 @@ export default function Header() {
             height={20}
             priority
           />
-          <h1 className="text-xl font-bold text-white dark:text-white">FilmWiki</h1>
+          <h1 className="text-xl font-bold text-white dark:text-white">
+            FilmWiki
+          </h1>
         </Link>
 
-        {/* Favorites Link */}
-        <Link
-          href="/favorites"
-          className="text-white hover:text-yellow-300 font-medium transition-colors"
-        >
-          Favorites
-        </Link>
+        {/* Show Favorites only if logged in */}
+        {status === "authenticated" && (
+          <Link
+            href="/favorites"
+            className="text-white hover:text-yellow-300 font-medium transition-colors"
+          >
+            Favorites
+          </Link>
+        )}
       </div>
 
-      {/* Theme Toggle */}
-      <button
-        onClick={() => setDarkMode(!darkMode)}
-        className="p-2 rounded-full mr-2 transition-colors 
-             bg-gray-300 dark:bg-gray-600 
-             hover:bg-black dark:hover:bg-white"
-      >
-        {darkMode ? (
-          <Sun className="w-5 h-5 text-yellow-400" />
+      {/* Right Section: Auth Buttons + Theme Toggle */}
+      <div className="flex items-center gap-3">
+        {status === "authenticated" ? (
+          <button
+            onClick={() => signOut({ callbackUrl: "/" })}
+            className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+          >
+            Logout
+          </button>
         ) : (
-          <Moon className="w-5 h-5 text-gray-800" />
+          <Link
+            href="/login"
+            className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
+          >
+            Login
+          </Link>
         )}
-      </button>
+
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="p-2 rounded-full transition-colors 
+               bg-gray-300 dark:bg-gray-600 
+               hover:bg-black dark:hover:bg-white"
+        >
+          {darkMode ? (
+            <Sun className="w-5 h-5 text-yellow-400" />
+          ) : (
+            <Moon className="w-5 h-5 text-gray-800" />
+          )}
+        </button>
+      </div>
     </header>
   );
 }
