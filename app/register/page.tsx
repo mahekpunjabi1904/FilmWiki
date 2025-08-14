@@ -15,7 +15,7 @@ export default function RegisterPage() {
     const res = await fetch("/api/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password })
+      body: JSON.stringify({ name, email, password }),
     });
 
     if (res.ok) {
@@ -28,19 +28,21 @@ export default function RegisterPage() {
   };
 
   return (
-    <main className="flex justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-900">
+    <main className="flex justify-center items-center min-h-screen bg-gray-900">
       <form
         onSubmit={handleSubmit}
-        className="bg-white dark:bg-gray-800 p-8 rounded shadow-md w-96"
+        className="bg-gray-800 p-8 rounded-2xl shadow-xl w-96 flex flex-col"
       >
-        <h1 className="text-2xl font-bold mb-6 text-center">Register</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center text-white">
+          Register
+        </h1>
 
         <input
           type="text"
           placeholder="Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full mb-4 p-2 border rounded"
+          className="w-full mb-4 p-3 border border-gray-600 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 transition"
           required
         />
         <input
@@ -48,7 +50,7 @@ export default function RegisterPage() {
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full mb-4 p-2 border rounded"
+          className="w-full mb-4 p-3 border border-gray-600 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 transition"
           required
         />
         <input
@@ -56,16 +58,23 @@ export default function RegisterPage() {
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full mb-4 p-2 border rounded"
+          className="w-full mb-6 p-3 border border-gray-600 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 transition"
           required
         />
 
         <button
           type="submit"
-          className="w-full bg-pink-600 hover:bg-pink-700 text-white py-2 rounded"
+          className="w-full bg-pink-500 hover:bg-pink-600 text-white py-3 rounded-lg font-semibold shadow-md transition transform hover:scale-105"
         >
           Register
         </button>
+
+        <p className="mt-6 text-center text-gray-300 text-sm">
+          Already have an account?{" "}
+          <a href="/login" className="text-pink-400 hover:underline">
+            Login
+          </a>
+        </p>
       </form>
     </main>
   );
