@@ -4,11 +4,12 @@ import { Sun, Moon } from "lucide-react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useSession, signOut } from "next-auth/react";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
   const [darkMode, setDarkMode] = useState(false);
   const { data: session, status } = useSession();
-  
+  const pathname = usePathname();
 
   useEffect(() => {
     if (darkMode) {
@@ -17,6 +18,11 @@ export default function Header() {
       document.documentElement.classList.remove("dark");
     }
   }, [darkMode]);
+
+  const linkClasses = (path: string) =>
+    `hover:text-yellow-300 transition-colors cursor-pointer font-medium ${
+      pathname === path ? "text-yellow-400 font-bold" : "text-gray-800 dark:text-white"
+    }`;
 
   return (
     <header className="sticky top-0 z-50 flex items-center justify-between p-1 bg-pink-800 dark:bg-pink-800">
@@ -36,16 +42,10 @@ export default function Header() {
 
       {/* Middle: Navigation Links */}
       <nav className="flex items-center gap-6">
-        <Link
-          href="/"
-          className="text-gray-800 dark:text-white hover:text-yellow-300 transition-colors cursor-pointer"
-        >
+        <Link href="/" className={linkClasses("/")}>
           Home
         </Link>
-        <Link
-          href="/favorites"
-          className="text-gray-800 dark:text-white hover:text-yellow-300 transition-colors cursor-pointer"
-        >
+        <Link href="/favorites" className={linkClasses("/favorites")}>
           Favorites
         </Link>
       </nav>
