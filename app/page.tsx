@@ -5,6 +5,7 @@ import { fetchFromTMDB, searchMovies } from "@/lib/tmdb";
 import Image from "next/image";
 import Link from "next/link";
 import SearchBar from "@/components/SearchBar";
+import SkeletonCard from "@/components/SkeletonCard";
 
 export default function Home() {
   const [movies, setMovies] = useState<any[]>([]);
@@ -34,7 +35,12 @@ export default function Home() {
   return (
     <main className="p-4">
       {/* Search Bar */}
-      <SearchBar onSearch={(query) => { setSearchQuery(query); setPage(1); }} />
+      <SearchBar
+        onSearch={(query) => {
+          setSearchQuery(query);
+          setPage(1);
+        }}
+      />
 
       {/* Title */}
       <h1 className="text-3xl font-bold mb-6">
@@ -43,7 +49,11 @@ export default function Home() {
 
       {/* Movie Grid */}
       {loading ? (
-        <p className="text-gray-500 dark:text-gray-400">Loading...</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <SkeletonCard key={i} />
+          ))}
+        </div>
       ) : (
         <>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
@@ -57,13 +67,17 @@ export default function Home() {
                     height={750}
                     className="w-full h-auto rounded mb-2"
                   />
-                  <h2 className="text-lg text-white font-semibold">{movie.title}</h2>
+                  <h2 className="text-lg text-white font-semibold">
+                    {movie.title}
+                  </h2>
                   <div className="text-sm text-white mt-1">
                     <p>
-                      <span className="text-pink-300">Ratings:</span> ⭐ {movie.vote_average?.toFixed(1) || "N/A"}
+                      <span className="text-pink-300">Ratings:</span> ⭐{" "}
+                      {movie.vote_average?.toFixed(1) || "N/A"}
                     </p>
                     <p>
-                      <span className="text-pink-300">Release Date:</span> {movie.release_date || "N/A"}
+                      <span className="text-pink-300">Release Date:</span>{" "}
+                      {movie.release_date || "N/A"}
                     </p>
                   </div>
                 </div>

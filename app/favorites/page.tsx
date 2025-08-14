@@ -7,6 +7,7 @@ import { getFavorites } from "@/lib/favorites";
 import Link from "next/link";
 import Image from "next/image";
 import FavoriteButton from "@/components/FavoriteButton";
+import SkeletonCard from "@/components/SkeletonCard";
 
 export default function FavoritesPage() {
   const { data: session, status } = useSession();
@@ -33,7 +34,13 @@ export default function FavoritesPage() {
   }, [status]);
 
   if (status === "loading" || loadingFavs) {
-    return <p>Loading...</p>;
+    return (
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-4">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <SkeletonCard key={i} />
+        ))}
+      </div>
+    );
   }
 
   return (
@@ -59,7 +66,9 @@ export default function FavoritesPage() {
                   height={750}
                   className="w-full h-auto rounded mb-2"
                 />
-                <h2 className="text-lg text-white font-semibold">{movie.title}</h2>
+                <h2 className="text-lg text-white font-semibold">
+                  {movie.title}
+                </h2>
               </Link>
               {/* Pass callback to refresh list */}
               <div className="mt-2">
