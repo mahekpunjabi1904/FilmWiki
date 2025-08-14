@@ -14,3 +14,20 @@ export async function fetchFromTMDB(endpoint: string) {
 
   return res.json();
 }
+export async function searchMovies(query: string) {
+  const res = await fetch(
+    `${BASE_URL}/search/movie?language=en-US&query=${encodeURIComponent(query)}`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_V4_KEY}`,
+        accept: "application/json",
+      },
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error(`TMDB Search API error: ${res.statusText}`);
+  }
+
+  return res.json();
+}
