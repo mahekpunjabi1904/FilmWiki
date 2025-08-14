@@ -6,18 +6,18 @@ interface Genre {
   name: string;
 }
 
-interface Movie {
+interface MovieDetails {
   id: number;
   title: string;
-  poster_path: string | null;
   overview: string;
-  release_date: string;
+  poster_path?: string | null;
+  release_date?: string;
   vote_average: number;
-  runtime: number;
+  runtime?: number;
   genres: Genre[];
 }
 
-export default function MovieDetailsCard({ movie }: { movie: Movie }) {
+export default function MovieDetailsCard({ movie }: { movie: MovieDetails }) {
   return (
     <div className="bg-gray-100 dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden max-w-5xl mx-auto">
       <div className="flex flex-col md:flex-row">
@@ -40,9 +40,7 @@ export default function MovieDetailsCard({ movie }: { movie: Movie }) {
           </h1>
           <FavoriteButton movie={movie} />
 
-          <p className="text-gray-700 dark:text-gray-300 mb-6">
-            {movie.overview}
-          </p>
+          <p className="text-gray-700 dark:text-gray-300 mb-6">{movie.overview}</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-800 dark:text-gray-200">
             <p>

@@ -1,20 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getFavorites } from "@/lib/favorites";
+import { getFavorites, toggleFavorite } from "@/lib/favorites"; // ✅ added toggleFavorite
 import Link from "next/link";
 import Image from "next/image";
 import SkeletonCard from "@/components/SkeletonCard";
-
-interface Movie {
-  id: number;
-  title: string;
-  poster_path: string;
-  vote_average?: number;
-  release_date?: string;
-}
+import type { Movie } from "@/lib/types";
 
 export default function FavoritesPage() {
   const { data: session, status } = useSession();
@@ -40,6 +34,12 @@ export default function FavoritesPage() {
     }
   }, [status]);
 
+  function removeFavorite(id: number) {
+    toggleFavorite({ id } as Movie).then(() => {
+      setFavorites((prev) => prev.filter((movie) => movie.id !== id));
+    });
+  }
+
   if (status === "loading" || loadingFavs) {
     return (
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-4">
@@ -48,11 +48,6 @@ export default function FavoritesPage() {
         ))}
       </div>
     );
-  }
-
-  function removeFavorite(id: number): void {
-    // Implement remove logic here
-    console.log(`Remove favorite with id ${id}`);
   }
 
   return (
@@ -82,6 +77,7 @@ export default function FavoritesPage() {
                   <h2 className="text-lg text-white font-semibold">
                     {movie.title}
                   </h2>
+
                   <div className="text-sm text-white mt-1">
                     <p>
                       <span className="text-pink-300">Ratings:</span> ⭐{" "}
@@ -94,6 +90,7 @@ export default function FavoritesPage() {
                   </div>
                 </div>
               </Link>
+
               <button
                 onClick={() => removeFavorite(movie.id)}
                 className="mt-2 bg-pink-600 hover:bg-pink-700 text-white px-3 py-1 rounded"

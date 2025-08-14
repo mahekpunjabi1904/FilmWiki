@@ -6,6 +6,7 @@ import { fetchFromTMDB } from "@/lib/tmdb";
 import MovieDetailsCard from "@/components/MovieDetailsCard";
 import SkeletonMovieDetails from "@/components/SkeletonMovieDetails";
 
+
 interface Movie {
   id: number;
   title: string;
