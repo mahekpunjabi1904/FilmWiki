@@ -56,24 +56,43 @@ export default function FavoritesPage() {
           {favorites.map((movie) => (
             <div
               key={movie.id}
-              className="bg-gray-100 dark:bg-gray-800 p-4 rounded shadow hover:shadow-lg hover:scale-105 transition-transform duration-200"
+              className="bg-gray-100 dark:bg-gray-800 p-4 rounded shadow"
             >
+              {/* Wrap image and title in Link so card is clickable */}
               <Link href={`/movie/${movie.id}`}>
-                <Image
-                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                  alt={movie.title}
-                  width={500}
-                  height={750}
-                  className="w-full h-auto rounded mb-2"
-                />
-                <h2 className="text-lg text-white font-semibold">
-                  {movie.title}
-                </h2>
+                <div className="cursor-pointer hover:scale-105 transition-transform duration-200">
+                  <Image
+                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                    alt={movie.title}
+                    width={500}
+                    height={750}
+                    className="w-full h-auto rounded mb-2"
+                  />
+                  <h2 className="text-lg text-white font-semibold">
+                    {movie.title}
+                  </h2>
+
+                  {/* Rating & release date like home page */}
+                  <div className="text-sm text-white mt-1">
+                    <p>
+                      <span className="text-pink-300">Ratings:</span> ⭐{" "}
+                      {movie.vote_average?.toFixed(1) || "N/A"}
+                    </p>
+                    <p>
+                      <span className="text-pink-300">Release Date:</span>{" "}
+                      {movie.release_date || "Unknown"}
+                    </p>
+                  </div>
+                </div>
               </Link>
-              {/* Pass callback to refresh list */}
-              <div className="mt-2">
-                <FavoriteButton movie={movie} onToggle={loadFavorites} />
-              </div>
+
+              {/* Remove Favorite button */}
+              <button
+                onClick={() => removeFavorite(movie.id)}
+                className="mt-2 bg-pink-600 hover:bg-pink-700 text-white px-3 py-1 rounded"
+              >
+                Remove Favorite
+              </button>
             </div>
           ))}
         </div>
