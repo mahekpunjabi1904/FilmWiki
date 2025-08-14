@@ -5,6 +5,7 @@ import { fetchFromTMDB, searchMovies } from "@/lib/tmdb";
 import Image from "next/image";
 import Link from "next/link";
 import SearchBar from "@/components/SearchBar";
+import FavoriteButton from "@/components/FavoriteButton";
 
 export default function Home() {
   const [movies, setMovies] = useState<any[]>([]);
@@ -45,6 +46,7 @@ export default function Home() {
       <h1 className="text-3xl font-bold mb-6">
         {searchQuery ? `Search Results for "${searchQuery}"` : "Popular Movies"}
       </h1>
+      
 
       {/* Loading State */}
       {loading ? (
@@ -70,6 +72,8 @@ export default function Home() {
                 <h2 className="text-lg text-white font-semibold">
                   {movie.title}
                 </h2>
+                <FavoriteButton movie={movie} />
+
 
                 {/* Rating & release date */}
                 <div className="text-sm text-white mt-1">

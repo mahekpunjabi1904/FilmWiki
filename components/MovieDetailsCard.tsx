@@ -1,4 +1,6 @@
 import Image from "next/image";
+import FavoriteButton from "@/components/FavoriteButton";
+
 
 export default function MovieDetailsCard({ movie }: { movie: any }) {
   return (
@@ -19,6 +21,8 @@ export default function MovieDetailsCard({ movie }: { movie: any }) {
         {/* Movie info */}
         <div className="md:w-2/3 p-6 flex flex-col justify-center">
           <h1 className="text-4xl font-bold mb-4 text-pink-300 dark:text-pink-300">{movie.title}</h1>
+          <FavoriteButton movie={movie} />
+
           <p className="text-gray-700 dark:text-gray-300 mb-6">{movie.overview}</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-800 dark:text-gray-200">
