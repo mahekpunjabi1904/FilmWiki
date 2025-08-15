@@ -1,17 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import Link from "next/link";
-import { Sun, Moon, Menu, X, User, Search } from "lucide-react";
+import { Sun, Moon, Menu, X, User } from "lucide-react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 
 export default function Header() {
   const [darkMode, setDarkMode] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const { data: session } = useSession();
   const pathname = usePathname();
   const router = useRouter();
@@ -31,15 +29,6 @@ export default function Header() {
         : "text-gray-800 dark:text-white"
     }`;
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/search?query=${encodeURIComponent(searchQuery)}`);
-      setSearchOpen(false);
-      setMenuOpen(false);
-    }
-  };
-
   return (
     <header className="sticky top-0 z-50 flex items-center justify-between p-2 bg-pink-800 dark:bg-pink-800">
       {/* Left: Logo */}
@@ -55,7 +44,6 @@ export default function Header() {
           <h1 className="text-lg font-bold text-white">FilmWiki</h1>
         </Link>
       </div>
-      
 
       {/* Desktop Nav */}
       <nav className="hidden md:flex items-center gap-6">
@@ -81,9 +69,15 @@ export default function Header() {
           )}
         </button>
 
-        {/* User Icon */}
+        {/* Profile Icon → Direct navigation */}
         <button
-          onClick={() => router.push("/login")}
+          onClick={() => {
+            if (session) {
+              router.push("/profile");
+            } else {
+              router.push("/login");
+            }
+          }}
           className="p-2 rounded-full bg-gray-300 dark:bg-gray-600 hover:bg-pink-500 hover:shadow-lg hover:shadow-pink-300/50 transition-all duration-200 group"
         >
           <User className="w-5 h-5 text-gray-800 dark:text-white group-hover:text-white" />
